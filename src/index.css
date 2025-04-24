@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* Prevent pull-to-refresh and other weird scroll effects */
+  overscroll-behavior-y: contain;
+}
+
+/* Style for the main home page content */
+.home {
+  padding: 1rem;
+  height: 100vh; /* Ensure it takes height */
+  box-sizing: border-box;
+}
+
+.sheet-overlay {
+  position: fixed;
+  /* Use inset for cleaner top/right/bottom/left */
+  inset: 0;
+  /* Optional background dimming */
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  z-index: 10;
+  /* Ensure it's above other content */
+  /* Add transition for the slide-in animation */
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.4, 1); /* Example easing */
+}
+
+/* Styles for the backdrop */
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: black;
+  /* Opacity is controlled by inline style, transition is applied here */
+  transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.4, 1); /* Match overlay timing */
+  /* Ensure it's behind the scroll container but visible */
+  z-index: 1; /* Below scroll container (implicit z-index higher) */
+  /* Allow clicks/taps to pass through if not interactive */
+  /* pointer-events: none; Remove this if using onClick in JSX */
+}
+
+.back-button {
+  position: absolute;
+  /* Position based on overlay */
+  top: 1rem;
+  left: 1rem;
+  z-index: 30;
+  /* Ensure it's above the scroll container */
+  background: rgba(200, 200, 200, 0.7);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  -webkit-backdrop-filter: blur(5px);
+  /* iOS-like frosted glass */
+  backdrop-filter: blur(5px);
+}
+
+.sheet-scroll-container {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* Crucial: Enable horizontal scroll snap */
+  scroll-snap-type: x mandatory;
+  /* Arrange back area and content horizontally */
+  display: flex;
+  /* Prevent pull-to-refresh/bounce effects within the sheet */
+  overscroll-behavior-x: contain;
+  /* Hide scrollbar across browsers */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+.sheet-scroll-container::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari/Opera */
+}
+
+.sheet-back-area,
+.sheet-content-area {
+  /* Each 'page' takes full viewport width */
+  width: 100vw;
+  height: 100%;
+  /* Crucial: Define snap points */
+  scroll-snap-align: start;
+  /* Prevent flex items from shrinking */
+  flex-shrink: 0;
+  /* Allow vertical scroll within the content area if needed */
+  overflow-y: auto;
+  /* Optional: Helps prevent accidental vertical scroll during horizontal drag */
+  overscroll-behavior-y: contain;
+}
+
+.sheet-content-area {
+  /* Add relative positioning */
+  position: relative;
+  background-color: #f8f8f8;
+  /* Light background for the sheet */
+  padding: 1rem;
+  /* Adjust top padding to account for the back button */
+  padding-top: 5rem;
+  box-sizing: border-box;
+}
+
+/* Optional: Style for back area for debugging or visual effect */
+.sheet-back-area {
+  /* background: lightblue; */
+  /* This area is visually behind the sheet content */
+}
