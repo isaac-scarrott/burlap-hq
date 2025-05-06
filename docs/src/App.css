@@ -1,0 +1,280 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #eef1f5 0%, #e6e9ed 100%);
+  color: #333;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: #fff;
+  padding: 0 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #555;
+  margin-left: 25px;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #007aff;
+}
+
+.nav-button {
+  background-color: #007aff;
+  color: white !important; /* Important to override link color */
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #005ecb;
+}
+
+.menu-icon {
+  display: none; /* Hidden by default, shown on mobile */
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.hero-content {
+  text-align: center;
+  padding: 80px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.beta-badge {
+  display: inline-block;
+  background-color: #e0e0e0;
+  color: #555;
+  padding: 5px 15px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-buttons .cta-button {
+  padding: 15px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 25px;
+  text-decoration: none;
+  margin: 0 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-button.primary {
+  background-color: #333;
+  color: white;
+}
+
+.cta-button.primary:hover {
+  background-color: #555;
+}
+
+.cta-button.secondary {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.cta-button.secondary:hover {
+  background-color: #e0e0e0;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.gallery-item {
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 0; /* Remove padding if image fills the top */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left; /* Align text to the left for card content */
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; Removed to allow natural flow */
+  /* align-items: center; Removed for natural flow */
+  /* min-height: 200px; Height will be determined by content */
+  overflow: hidden; /* To make sure image corners are rounded */
+}
+
+.gallery-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+}
+
+.gallery-item-image {
+  width: 100%;
+  height: 200px; /* Fixed height for images */
+  object-fit: cover; /* Cover the area, might crop */
+  border-top-left-radius: 15px; /* Match card radius */
+  border-top-right-radius: 15px; /* Match card radius */
+}
+
+.gallery-item h3 {
+  font-size: 1.25rem; /* Adjusted for card titles */
+  font-weight: 600;
+  color: #333;
+  margin: 15px 20px 5px; /* Add padding to text content */
+}
+
+.gallery-item p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 20px 20px; /* Add padding to text content */
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Hide links */
+    position: absolute;
+    top: 70px; /* Below navbar */
+    left: 0;
+    right: 0;
+    background-color: white;
+    flex-direction: column;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  .nav-links.active {
+    display: flex; /* Show when active */
+  }
+
+  .nav-links a {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  .nav-button {
+    width: calc(100% - 40px);
+    margin: 10px 20px;
+    text-align: center;
+  }
+
+  .menu-icon {
+    display: block; /* Show hamburger icon */
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-buttons .cta-button {
+    width: 80%;
+    margin: 10px 0;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr; /* Stack gallery items on mobile */
+  }
+}
+
+/* Styles for the sheet itself */
+.burlap-sheet-content {
+  padding: 20px;
+  min-height: 300px;
+  background-color: #fff;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.burlap-sheet-content h1 {
+  margin-top: 1rem; /* Adjusted from 2rem */
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.burlap-sheet-content p {
+  color: #555;
+  line-height: 1.6;
+}
+
+.burlap-sheet-content .cta-button {
+  margin-top: 20px;
+}

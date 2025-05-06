@@ -42,14 +42,14 @@ export function SheetPresence({ children }: SheetPresenceProps) {
 
   return Array.from(renderedChildren).map((child) => {
     const key = getChildKey(child);
-    const isExiting = !presentKeys.includes(key);
+    const isUnMounted = !presentKeys.includes(key);
 
     return (
       <SheetPresenceItemContext.Provider
         key={key}
         value={{
           onExitTransitionEnd: () => onExitTransitionEnd(key),
-          isExiting,
+          isUnMounted,
         }}
       >
         {child}

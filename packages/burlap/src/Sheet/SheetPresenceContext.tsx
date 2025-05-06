@@ -2,8 +2,8 @@ import { createContext } from "react";
 
 export const SheetPresenceItemContext = createContext<{
   onExitTransitionEnd: () => void;
-  isExiting: boolean;
+  isUnMounted: boolean;
 }>({
   onExitTransitionEnd: () => {},
-  isExiting: false,
+  isUnMounted: false,
 });

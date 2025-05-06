@@ -6,10 +6,12 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import clsx from "clsx";
 
 import styles from "./sheet.module.css";
 import { SheetPresenceItemContext } from "./SheetPresenceContext";
+import { RemoveScroll } from "react-remove-scroll";
 
 /**
  * Sliding overlay that behaves like a card-stack "sheet".
@@ -29,11 +31,11 @@ export function Sheet({
   onTransitionEnd,
   ...rest
 }: SheetProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const horizontalScrollContainerRef = useRef<HTMLDivElement>(null);
   const hasAutoScrolled = useRef(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [shouldBeTransitionedIn, setShouldBeTransitionedIn] = useState(false);
 
-  const { onExitTransitionEnd, isExiting } = useContext(
+  const { onExitTransitionEnd, isUnMounted } = useContext(
     SheetPresenceItemContext
   );
 
@@ -43,14 +45,16 @@ export function Sheet({
 
   // Trigger the enter animation on the next frame so that CSS transitions run
   useEffect(() => {
-    const id = requestAnimationFrame(() => setIsVisible(true));
+    const id = requestAnimationFrame(() => setShouldBeTransitionedIn(true));
+
     return () => cancelAnimationFrame(id);
   }, []);
 
   // Auto‑scroll the container so the content starts fully on‑screen, allowing
   // users to swipe right to close.
   useEffect(() => {
-    const node = scrollContainerRef.current;
+    const node = horizontalScrollContainerRef.current;
+
     if (!node) return;
 
     const id = requestAnimationFrame(() => {
@@ -67,73 +71,73 @@ export function Sheet({
 
   const executeClose = useCallback(() => {
     hasAutoScrolled.current = false;
-    setIsVisible(false);
+    setShouldBeTransitionedIn(false);
 
-    if (!isExiting) {
+    if (!isUnMounted) {
       onClose();
     }
-  }, [isExiting, onClose]);
+  }, [isUnMounted, onClose]);
 
-  const handleScroll = useCallback(
-    (e: React.UIEvent<HTMLDivElement>) => {
-      if (hasAutoScrolled.current && e.currentTarget.scrollLeft < 1) {
-        executeClose();
+  function handleScroll(e: React.UIEvent<HTMLDivElement>) {
+    if (!hasAutoScrolled.current) return;
+    if (e.currentTarget.scrollLeft >= 1) return;
+
+    executeClose();
+  }
+
+  function handleTransitionEnd(e: React.TransitionEvent<HTMLDivElement>) {
+    onTransitionEnd?.(e);
+
+    if (e.propertyName !== "transform") return;
+
+    if (!shouldBeTransitionedIn) {
+      if (!isUnMounted) {
+        onClose();
       }
-    },
-    [executeClose]
-  );
-
-  const handleTransitionEnd = useCallback(
-    (e: React.TransitionEvent<HTMLDivElement>) => {
-      onTransitionEnd?.(e);
-      if (e.propertyName !== "transform") return;
-
-      if (!isVisible) {
-        if (!isExiting) {
-          onClose();
-        }
-        onExitTransitionEnd();
-      }
-    },
-    [isVisible, isExiting, onClose, onExitTransitionEnd, onTransitionEnd]
-  );
+      onExitTransitionEnd();
+    }
+  }
 
   useEffect(() => {
-    if (isExiting && isVisible) setIsVisible(false);
-  }, [isExiting, isVisible]);
+    if (!isUnMounted) return;
+    if (!shouldBeTransitionedIn) return;
+
+    setShouldBeTransitionedIn(false);
+  }, [isUnMounted, shouldBeTransitionedIn]);
 
   /* ------------------------------------------------------------------*/
 
-  return (
-    <div
+  return createPortal(
+    <RemoveScroll
       {...rest}
-      className={clsx(styles.sheetOverlay, className)}
-      style={{
-        ...style,
-        transform: isVisible ? "translateX(0)" : "translateX(100%)",
-      }}
-      onTransitionEnd={handleTransitionEnd}
+      removeScrollBar={false}
+      as='div'
+      className={styles.sheetOverlay}
+      data-is-visible={shouldBeTransitionedIn}
+      {...({
+        onTransitionEnd: handleTransitionEnd,
+      } as React.HTMLAttributes<HTMLDivElement>)}
     >
       <div
-        ref={scrollContainerRef}
+        ref={horizontalScrollContainerRef}
         className={styles.sheetScrollContainer}
         onScroll={handleScroll}
       >
         <div className={styles.sheetBackArea} />
 
-        <div className={styles.sheetContentArea}>
+        <div className={styles.sheetContentArea} style={style}>
           <button
             type='button'
-            className={styles.backButton}
+            className={clsx(styles.backButton, className)}
             aria-label='Go back'
             onClick={executeClose}
           >
             ←
           </button>
-
           {children}
         </div>
       </div>
-    </div>
+    </RemoveScroll>,
+    document.body
   );
 }

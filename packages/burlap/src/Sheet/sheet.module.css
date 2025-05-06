@@ -2,25 +2,31 @@
   overscroll-behavior-y: contain;
 }
 
-.sheetOverlay { /* Renamed from sheet-overlay for CSS Modules convention */
+.sheetOverlay {
   position: fixed;
   /* Use inset for cleaner top/right/bottom/left */
   inset: 0;
   /* Optional background dimming */
-  /* background-color: rgba(0, 0, 0, 0.1); */
   z-index: 10;
+  transform: translateX(100%);
   /* Ensure it's above other content */
   /* Add transition for the slide-in animation */
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.4, 1); /* Example easing */
 }
 
+.sheetOverlay[data-is-visible="true"] {
+  transform: translateX(0);
+}
+
+
+
 /* Style for stacked sheets - each subsequent sheet will have a higher z-index */
-.sheetOverlay[data-stack-index] { /* Renamed from sheet-overlay for CSS Modules convention */
+.sheetOverlay[data-stack-index] {
   z-index: calc(10 + attr(data-stack-index number));
 }
 
 /* Styles for the backdrop */
-.sheetBackdrop { /* Renamed from sheet-backdrop for CSS Modules convention */
+.sheetBackdrop {
   position: absolute;
   inset: 0;
   background: black;
@@ -28,11 +34,9 @@
   transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.4, 1); /* Match overlay timing */
   /* Ensure it's behind the scroll container but visible */
   z-index: 1; /* Below scroll container (implicit z-index higher) */
-  /* Allow clicks/taps to pass through if not interactive */
-  /* pointer-events: none; Remove this if using onClick in JSX */
 }
 
-.backButton { /* Renamed from back-button for CSS Modules convention */
+.backButton {
   position: absolute;
   /* Position based on overlay */
   top: 1rem;
@@ -51,7 +55,7 @@
   backdrop-filter: blur(5px);
 }
 
-.sheetScrollContainer { /* Renamed from sheet-scroll-container for CSS Modules convention */
+.sheetScrollContainer {
   width: 100%;
   height: 100%;
   overflow-x: auto;
@@ -69,13 +73,13 @@
   /* IE/Edge */
 }
 
-.sheetScrollContainer::-webkit-scrollbar { /* Renamed from sheet-scroll-container for CSS Modules convention */
+.sheetScrollContainer::-webkit-scrollbar {
   display: none;
   /* Chrome/Safari/Opera */
 }
 
-.sheetBackArea, /* Renamed from sheet-back-area for CSS Modules convention */
-.sheetContentArea { /* Renamed from sheet-content-area for CSS Modules convention */
+.sheetBackArea,
+.sheetContentArea {
   /* Each 'page' takes full viewport width */
   width: 100vw;
   height: 100%;
@@ -89,7 +93,7 @@
   overscroll-behavior-y: contain;
 }
 
-.sheetContentArea { /* Renamed from sheet-content-area for CSS Modules convention */
+.sheetContentArea {
   /* Add relative positioning */
   position: relative;
   background-color: #f8f8f8;
