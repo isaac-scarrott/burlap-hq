@@ -1,21 +1,8 @@
-@import "tailwindcss";
-
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  /* Prevent pull-to-refresh and other weird scroll effects */
+:global(body) {
   overscroll-behavior-y: contain;
 }
 
-/* Style for the main home page content */
-.home {
-  padding: 1rem;
-  height: 100vh; /* Ensure it takes height */
-  box-sizing: border-box;
-}
-
-.sheet-overlay {
+.sheetOverlay { /* Renamed from sheet-overlay for CSS Modules convention */
   position: fixed;
   /* Use inset for cleaner top/right/bottom/left */
   inset: 0;
@@ -27,8 +14,13 @@ body {
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.4, 1); /* Example easing */
 }
 
+/* Style for stacked sheets - each subsequent sheet will have a higher z-index */
+.sheetOverlay[data-stack-index] { /* Renamed from sheet-overlay for CSS Modules convention */
+  z-index: calc(10 + attr(data-stack-index number));
+}
+
 /* Styles for the backdrop */
-.sheet-backdrop {
+.sheetBackdrop { /* Renamed from sheet-backdrop for CSS Modules convention */
   position: absolute;
   inset: 0;
   background: black;
@@ -40,7 +32,7 @@ body {
   /* pointer-events: none; Remove this if using onClick in JSX */
 }
 
-.back-button {
+.backButton { /* Renamed from back-button for CSS Modules convention */
   position: absolute;
   /* Position based on overlay */
   top: 1rem;
@@ -59,7 +51,7 @@ body {
   backdrop-filter: blur(5px);
 }
 
-.sheet-scroll-container {
+.sheetScrollContainer { /* Renamed from sheet-scroll-container for CSS Modules convention */
   width: 100%;
   height: 100%;
   overflow-x: auto;
@@ -77,13 +69,13 @@ body {
   /* IE/Edge */
 }
 
-.sheet-scroll-container::-webkit-scrollbar {
+.sheetScrollContainer::-webkit-scrollbar { /* Renamed from sheet-scroll-container for CSS Modules convention */
   display: none;
   /* Chrome/Safari/Opera */
 }
 
-.sheet-back-area,
-.sheet-content-area {
+.sheetBackArea, /* Renamed from sheet-back-area for CSS Modules convention */
+.sheetContentArea { /* Renamed from sheet-content-area for CSS Modules convention */
   /* Each 'page' takes full viewport width */
   width: 100vw;
   height: 100%;
@@ -97,7 +89,7 @@ body {
   overscroll-behavior-y: contain;
 }
 
-.sheet-content-area {
+.sheetContentArea { /* Renamed from sheet-content-area for CSS Modules convention */
   /* Add relative positioning */
   position: relative;
   background-color: #f8f8f8;
@@ -106,10 +98,6 @@ body {
   /* Adjust top padding to account for the back button */
   padding-top: 5rem;
   box-sizing: border-box;
-}
-
-/* Optional: Style for back area for debugging or visual effect */
-.sheet-back-area {
-  /* background: lightblue; */
-  /* This area is visually behind the sheet content */
+  /* Add subtle shadow to indicate stacking */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
